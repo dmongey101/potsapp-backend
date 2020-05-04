@@ -7,7 +7,6 @@ const io = require("socket.io").listen(server);
 const port = process.env.PORT || 3000
 const user = require('./routes/userRoutes');
 const room = require('./routes/roomsRoutes');
-const roomsController = require('./controllers/rooms/room');
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
@@ -22,8 +21,8 @@ io.on("connection", socket => {
   console.log('a user connected')
 
   socket.on("join-room", data => {
-    console.log(roomsController.rooms)
     socket.join(data.room);
+    console.log(data)
     io.to(data.room).emit("player-joined", data.player);
   });
 });

@@ -8,11 +8,9 @@ exports.getRooms = (req, res) => {
 
 exports.getPlayers = (req, res) => {
     var players = [];
-    console.log(rooms[req.params.room].players)
     rooms[req.params.room].players.forEach(player => {
         players.push(player.name)
     })
-    console.log(players)
     res.send(players);
 }
 
@@ -42,8 +40,5 @@ exports.joinRoom = (req, res) => {
     }
     rooms[req.body.roomName].players.push(player)
 }
-
-console.log(rooms)
-
 
 exports.rooms = rooms
