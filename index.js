@@ -14,6 +14,10 @@ app.use(bodyParser.json());
 app.use('/user', user);
 app.use('/rooms', room);
 
+app.get('/', (req, res) => {
+  res.send('Working');
+})
+
 io.on("connection", socket => {
   console.log('a user connected')
 
