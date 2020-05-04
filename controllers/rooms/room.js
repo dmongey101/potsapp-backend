@@ -37,8 +37,6 @@ exports.createRoom = (req, res) => {
     }
 
     assignTeam(player, noOfTeams)
-
-    console.log(rooms);
 }
 
 exports.joinRoom = (req, res) => {
@@ -50,6 +48,8 @@ exports.joinRoom = (req, res) => {
     rooms[req.body.roomName].players.push(player);
 
     assignTeam(player);
+
+    console.log(rooms);
 }
 
 function assignTeam(player) {
