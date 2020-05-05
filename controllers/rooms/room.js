@@ -1,3 +1,4 @@
+const io = require('../../index').io;
 const rooms = {}
 
 exports.getRooms = (req, res) => {
@@ -27,7 +28,7 @@ exports.createRoom = (req, res) => {
         noOfPlayers: req.body.noOfPlayers,
         noOfTeams: req.body.noOfTeams,
         players: [player],
-        pot: [],
+        pot1: [],
         pot2: [],
         teams: {}
     }
@@ -46,10 +47,17 @@ exports.joinRoom = (req, res) => {
         room: req.body.roomName
     }
     rooms[req.body.roomName].players.push(player);
-
     assignTeam(player);
+}
 
-    console.log(rooms);
+exports.submitWords = (req, res) => {
+    rooms[req.body.roomName].pot1.push(req.body.word1, req.body.word2, req.body.word3, req.body.word4);
+
+    if (rooms[req.body.roomName].pot1.length >= parseInt(rooms[req.body.roomName].noOfPlayers) * 4) {
+        req.app.io.to(req.body.roomName).emit('start-game');
+    } else {
+        req.app.io.to(req.body.roomName).emit('player-ready', req.body.player);
+    }
 }
 
 function assignTeam(player) {
@@ -57,7 +65,7 @@ function assignTeam(player) {
     const noOfTeams = parseInt(rooms[player.room].noOfTeams);
 
     for (var i = 1; i <= noOfPlayers; i++) {
-        if (rooms[player.room].teams[i.toString()].length <= (noOfPlayers/noOfTeams)) {
+        if (rooms[player.room].teams[i.toString()].length < Math.floor((noOfPlayers/noOfTeams))) {
             rooms[player.room].teams[i.toString()].push(player);
             break;
         }
