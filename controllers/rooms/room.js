@@ -1,5 +1,6 @@
 const io = require('../../index').io;
-const rooms = {}
+const Room = require('../../models/room');
+const rooms = {};
 
 exports.getRooms = (req, res) => {
     var roomNames = [];
@@ -51,10 +52,29 @@ exports.joinRoom = (req, res) => {
 }
 
 exports.submitWords = (req, res) => {
-    rooms[req.body.roomName].pot1.push(req.body.word1, req.body.word2, req.body.word3, req.body.word4);
 
-    if (rooms[req.body.roomName].pot1.length >= parseInt(rooms[req.body.roomName].noOfPlayers) * 4) {
+    const room = rooms[req.body.roomName];
+
+    room.pot1.push(req.body.word1, req.body.word2, req.body.word3, req.body.word4);
+
+    if (room.pot1.length >= parseInt(room.noOfPlayers) * 4) {
+        let roomToSave = new Room({
+            name: req.body.roomName,
+            noOfPlayers: parseInt(room.noOfPlayers),
+            pot1: room.pot1,
+            teams: room.teams
+        })
+
+        roomToSave.save()
+            .then(room => {
+                console.log(req.body.roomName+ ' saved in database')
+            })
+            .catch(err => {
+                console.log(err)
+            })
+
         req.app.io.to(req.body.roomName).emit('start-game');
+
     } else {
         req.app.io.to(req.body.roomName).emit('player-ready', req.body.player);
     }
@@ -66,7 +86,7 @@ function assignTeam(player) {
 
     for (var i = 1; i <= noOfPlayers; i++) {
         if (rooms[player.room].teams[i.toString()].length < Math.floor((noOfPlayers/noOfTeams))) {
-            rooms[player.room].teams[i.toString()].push(player);
+            rooms[player.room].teams[i.toString()].push(player.name);
             break;
         }
     }

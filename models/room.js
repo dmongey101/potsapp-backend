@@ -8,9 +8,9 @@ let RoomSchema = new Schema({
     currentRound: {type: String, required: true, default: 'Articulate'},
     redTeamScore: {type: Number, required: true, default: 0},
     blueTeamScore: {type: Number, required: true, default: 0},
-    players: {type: Array, required: true},
     pot1: {type: Array, required: true},
-    pot2: {type: Array, required: true}
+    pot2: {type: Array, required: true, default: []},
+    teams: {type: Object, required: true}
 })
 
 module.exports = mongoose.model('Room', RoomSchema);
