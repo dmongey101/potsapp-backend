@@ -5,9 +5,9 @@ let RoomSchema = new Schema({
     name: {type: String, required: true, max: 50},
     noOfPlayers: {type: Number, required: true},
     currentPlayer: {type: Number, required: true, default: 1},
+    currentTeam: {type: Number, required: true, default: 1},
     currentRound: {type: String, required: true, default: 'Articulate'},
-    redTeamScore: {type: Number, required: true, default: 0},
-    blueTeamScore: {type: Number, required: true, default: 0},
+    scores: {type: Array, required: true, default: []}, 
     pot1: {type: Array, required: true},
     pot2: {type: Array, required: true, default: []},
     teams: {type: Object, required: true}

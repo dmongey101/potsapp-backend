@@ -26,16 +26,20 @@ exports.createRoom = (req, res) => {
     const noOfTeams = parseInt(req.body.noOfTeams);
 
     rooms[req.body.roomName] = {
+        room: req.body.roomName,
         noOfPlayers: req.body.noOfPlayers,
         noOfTeams: req.body.noOfTeams,
         players: [player],
+        scores: [],
         pot1: [],
         pot2: [],
         teams: {}
     }
 
     for (var i = 1; i <= noOfTeams; i++) {
-        rooms[req.body.roomName].teams[i.toString()] = [];
+        var team = i.toString();
+        rooms[req.body.roomName].scores.push({ [team]: 0 });
+        rooms[req.body.roomName].teams[team] = [];
     }
 
     assignTeam(player, noOfTeams)
@@ -65,6 +69,7 @@ exports.submitWords = (req, res) => {
             name: req.body.roomName,
             noOfPlayers: parseInt(rooms[req.body.roomName].noOfPlayers),
             pot1: rooms[req.body.roomName].pot1,
+            scores: rooms[req.body.roomName].scores,
             teams: teams
         })
 
@@ -81,6 +86,13 @@ exports.submitWords = (req, res) => {
     } else {
         req.app.io.to(req.body.roomName).emit('player-ready', req.body.player);
     }
+}
+
+exports.getCurrentRoom = (req, res) => {
+    Room.findOne({ name: req.params.room }, function(err, room) {
+        if (room == null) res.send(err);
+        else res.send(room);
+    });
 }
 
 function assignTeam(player) {
