@@ -59,13 +59,13 @@ exports.submitWords = (req, res) => {
 
     if (rooms[req.body.roomName].pot1.length >= parseInt(rooms[req.body.roomName].noOfPlayers) * 4) {
 
-        assignPlayerPositions(rooms[req.body.roomName].teams);
+        var teams = assignPlayerPositions(rooms[req.body.roomName].teams);
 
         let roomToSave = new Room({
             name: req.body.roomName,
             noOfPlayers: parseInt(rooms[req.body.roomName].noOfPlayers),
             pot1: rooms[req.body.roomName].pot1,
-            teams: rooms[req.body.roomName].teams
+            teams: teams
         })
 
         roomToSave.save()
@@ -89,21 +89,20 @@ function assignTeam(player) {
 
     for (var i = 1; i <= noOfPlayers; i++) {
         if (rooms[player.room].teams[i.toString()].length < Math.floor((noOfPlayers/noOfTeams))) {
-            rooms[player.room].teams[i.toString()].push(player.name);
+            rooms[player.room].teams[i.toString()].push({ player: player.name, position: 0 });
             break;
         }
     }
 }
 
 function assignPlayerPositions(teams) {
-
-    teams.forEach(team => {
+    Object.keys(teams).forEach(team => {
         var i = 1;
-        team.forEach(player => {
+        teams[team].forEach(player => {
             player.position = i;
-        }) 
-    })
-
+        }); 
+    });
+    return teams;
 }
 
 exports.rooms = rooms

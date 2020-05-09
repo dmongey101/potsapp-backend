@@ -24,12 +24,10 @@ io.on("connection", socket => {
 
   socket.on("join-room", data => {
     socket.join(data.room);
-    console.log(data)
     io.to(data.room).emit("player-joined", data.player);
   });
 
   socket.on('words-submitted', data => {
-
   });
 });
 
