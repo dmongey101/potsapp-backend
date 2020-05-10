@@ -24,11 +24,20 @@ io.on("connection", socket => {
 
   socket.on("join-room", data => {
     socket.join(data.room);
+    console.log('dd')
     io.to(data.room).emit("player-joined", data.player);
   });
 
-  socket.on('words-submitted', data => {
-  });
+  socket.on("start-timer", room => {
+    var counter = 5;
+    console.log('hi')
+    var RoundTimer = setInterval(() => {
+      io.to(room).emit('counter', counter);
+      if (counter === -1) {
+        clearInterval(RoundTimer);
+      }
+    }, 1000);
+  })
 });
 
 server.listen(port, () => console.log("server running on port:" + port));
