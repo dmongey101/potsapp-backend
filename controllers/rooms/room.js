@@ -29,6 +29,7 @@ exports.createRoom = (req, res) => {
         room: req.body.roomName,
         noOfPlayers: req.body.noOfPlayers,
         noOfTeams: req.body.noOfTeams,
+        currentPlayer: req.body.playerName,
         players: [player],
         scores: [],
         pot1: [],
@@ -68,6 +69,7 @@ exports.submitWords = (req, res) => {
         let roomToSave = new Room({
             name: req.body.roomName,
             noOfPlayers: parseInt(rooms[req.body.roomName].noOfPlayers),
+            currentPlayer: rooms[req.body.roomName].currentPlayer,
             pot1: rooms[req.body.roomName].pot1,
             scores: rooms[req.body.roomName].scores,
             teams: teams

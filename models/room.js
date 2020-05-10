@@ -4,7 +4,7 @@ const Schema = mongoose.Schema;
 let RoomSchema = new Schema({
     name: {type: String, required: true, max: 50},
     noOfPlayers: {type: Number, required: true},
-    currentPlayer: {type: Number, required: true, default: 1},
+    currentPlayer: {type: String, required: true},
     currentTeam: {type: Number, required: true, default: 1},
     currentRound: {type: String, required: true, default: 'Articulate'},
     scores: {type: Array, required: true, default: []}, 
