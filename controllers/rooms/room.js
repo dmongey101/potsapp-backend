@@ -58,7 +58,7 @@ exports.joinRoom = (req, res) => {
 
 exports.submitWords = (req, res) => {
 
-    const room = rooms[req.body.roomName];
+    var io = req.app.get('socketio');
 
     rooms[req.body.roomName].pot1.push(req.body.word1, req.body.word2, req.body.word3, req.body.word4);
 
@@ -83,10 +83,10 @@ exports.submitWords = (req, res) => {
                 console.log(err)
             })
 
-        req.app.io.to(req.body.roomName).emit('start-game');
+        io.to(req.body.roomName).emit('start-game');
 
     } else {
-        req.app.io.to(req.body.roomName).emit('player-ready', req.body.player);
+        io.to(req.body.roomName).emit('player-ready', req.body.player);
     }
 }
 

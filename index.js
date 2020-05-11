@@ -8,7 +8,7 @@ const port = process.env.PORT || 3000
 const user = require('./routes/userRoutes');
 const room = require('./routes/roomsRoutes');
 
-app.io = io;
+app.set('socketio', io);
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
@@ -41,7 +41,3 @@ io.on("connection", socket => {
 });
 
 server.listen(port, () => console.log("server running on port:" + port));
-
-module.exports  = {
-  io: io
-}
