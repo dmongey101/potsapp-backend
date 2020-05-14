@@ -40,7 +40,7 @@ io.on("connection", socket => {
 
   socket.on('next-round', room => {
     changeGameState(room);
-    console.log(room);
+    io.in(room.name).emit('new-game-state', room);
   })
 
 });
