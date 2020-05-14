@@ -40,10 +40,10 @@ exports.createRoom = (req, res) => {
     for (var i = 1; i <= noOfTeams; i++) {
         var team = i.toString();
         rooms[req.body.roomName].scores.push({ [team]: 0 });
-        rooms[req.body.roomName].teams[team] = [];
+        rooms[req.body.roomName].teams[team] = { currentPlayer: 1, players: [] };
     }
 
-    assignTeam(player, noOfTeams)
+    assignTeam(player)
 }
 
 exports.joinRoom = (req, res) => {
@@ -102,8 +102,8 @@ function assignTeam(player) {
     const noOfTeams = parseInt(rooms[player.room].noOfTeams);
 
     for (var i = 1; i <= noOfPlayers; i++) {
-        if (rooms[player.room].teams[i.toString()].length < Math.floor((noOfPlayers/noOfTeams))) {
-            rooms[player.room].teams[i.toString()].push({ player: player.name, position: 0 });
+        if (rooms[player.room].teams[i.toString()].players.length < Math.floor((noOfPlayers/noOfTeams))) {
+            rooms[player.room].teams[i.toString()].players.push({ player: player.name, position: 0 });
             break;
         }
     }
@@ -112,7 +112,7 @@ function assignTeam(player) {
 function assignPlayerPositions(teams) {
     Object.keys(teams).forEach(team => {
         var i = 1;
-        teams[team].forEach(player => {
+        teams[team].players.forEach(player => {
             player.position = i;
         }); 
     });
