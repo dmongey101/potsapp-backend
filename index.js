@@ -45,7 +45,7 @@ io.on("connection", socket => {
   })
 
   socket.on('inc-score', data => {
-    io.in(data.name).emit('updated-score', {currentTeam: data.currentTeam, score: data.score})
+    io.in(data.room).emit('updated-score', {currentTeam: data.currentTeam, score: data.score})
   })
 
 });
