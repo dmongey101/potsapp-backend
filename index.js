@@ -39,8 +39,13 @@ io.on("connection", socket => {
   })
 
   socket.on('next-round', room => {
+    console.log(room);
     changeGameState(room);
     io.in(room.name).emit('new-game-state', room);
+  })
+
+  socket.on('inc-score', data => {
+    io.in(data.name).emit('updated-score', {currentTeam: data.currentTeam, score: data.score})
   })
 
 });
