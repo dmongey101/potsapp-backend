@@ -49,7 +49,7 @@ io.on("connection", socket => {
     if (data.totalScore >= (data.noOfPlayers * 8) - 1) currentRound = 'One Word';
     if (data.totalScore >= (data.noOfPlayers * 12) - 1) currentRound = 'One Action';
     if (data.totalScore >= (data.noOfPlayers * 16) - 1) currentRound = 'Game Over';
-    io.in(data.room).emit('updated-score', {currentTeam: data.currentTeam, currentRound: currentRound, score: data.score})
+    io.in(data.room).emit('updated-score', {currentTeam: data.currentTeam, currentRound: currentRound, score: data.score, totalScore: data.totalScore})
   })
 
 });
