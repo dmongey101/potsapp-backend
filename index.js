@@ -45,6 +45,7 @@ io.on("connection", socket => {
 
   socket.on('inc-score', data => {
     var currentRound = 'Articulate';
+    data.totalScore ++;
     if (data.totalScore >= (data.noOfPlayers * 4) - 1) currentRound = 'Charades';
     if (data.totalScore >= (data.noOfPlayers * 8) - 1) currentRound = 'One Word';
     if (data.totalScore >= (data.noOfPlayers * 12) - 1) currentRound = 'One Action';
