@@ -7,6 +7,7 @@ const io = require("socket.io").listen(server);
 const port = process.env.PORT || 3000
 const user = require('./routes/userRoutes');
 const room = require('./routes/roomsRoutes');
+const RoomDB = require('./models/room')
 
 app.set('socketio', io);
 
@@ -40,7 +41,13 @@ io.on("connection", socket => {
 
   socket.on('next-round', room => {
     changeGameState(room);
-    io.in(room.name).emit('new-game-state', room);
+    RoomDB.findOneAndUpdate({ name: room.name }, room, { new: true, upsert: true, useFindAndModify: false }, function(err, room) {
+      if (room == null) console.log(err);
+      else {
+        console.log(room.name + ' updated')
+        io.in(room.name).emit('new-game-state', room);
+      }
+    })
   })
 
   socket.on('inc-score', data => {
@@ -65,7 +72,7 @@ function changeGameState(room) {
 
   var nextPlayer = room.teams[room.currentTeam.toString()].players.find(x => x.position == room.teams[room.currentTeam.toString()].currentPlayer);
 
-  room.currentPlayer = nextPlayer.player;
+  room.currentPlayer = nextPlayer.playerEmail;
 
   return room;
 }

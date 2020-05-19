@@ -1,5 +1,6 @@
 const io = require('../../index').io;
 const Room = require('../../models/room');
+const User = require('../../models/user')
 const rooms = {};
 
 exports.getRooms = (req, res) => {
@@ -57,7 +58,6 @@ exports.joinRoom = (req, res) => {
 }
 
 exports.submitWords = (req, res) => {
-
     var io = req.app.get('socketio');
 
     rooms[req.body.roomName].pot1.push(req.body.word1, req.body.word2, req.body.word3, req.body.word4);
@@ -100,13 +100,18 @@ exports.getCurrentRoom = (req, res) => {
 function assignTeam(player) {
     const noOfPlayers = parseInt(rooms[player.room].noOfPlayers);
     const noOfTeams = parseInt(rooms[player.room].noOfTeams);
-
-    for (var i = 1; i <= noOfPlayers; i++) {
-        if (rooms[player.room].teams[i.toString()].players.length < Math.floor((noOfPlayers/noOfTeams))) {
-            rooms[player.room].teams[i.toString()].players.push({ player: player.name, position: 0 });
-            break;
+    User.findOne({ email: player.name }, function(err, user) {
+        if (user == null) console.log(err);
+        else {
+            for (var i = 1; i <= noOfPlayers; i++) {
+                if (rooms[player.room].teams[i.toString()].players.length < Math.floor((noOfPlayers/noOfTeams))) {
+                    rooms[player.room].teams[i.toString()].players.push({ player: user.username, playerEmail: player.name, position: 0 });
+                    break;
+                }
+            }
         }
-    }
+    })
+
 }
 
 function assignPlayerPositions(teams) {
