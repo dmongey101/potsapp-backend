@@ -39,13 +39,17 @@ io.on("connection", socket => {
   })
 
   socket.on('next-round', room => {
-    console.log(room);
     changeGameState(room);
     io.in(room.name).emit('new-game-state', room);
   })
 
   socket.on('inc-score', data => {
-    io.in(data.room).emit('updated-score', {currentTeam: data.currentTeam, score: data.score})
+    var currentRound = 'Articulate';
+    if (data.totalScore >= (data.noOfPlayers * 4) - 1) currentRound = 'Charades';
+    if (data.totalScore >= (data.noOfPlayers * 8) - 1) currentRound = 'One Word';
+    if (data.totalScore >= (data.noOfPlayers * 12) - 1) currentRound = 'One Action';
+    if (data.totalScore >= (data.noOfPlayers * 16) - 1) currentRound = 'Game Over';
+    io.in(data.room).emit('updated-score', {currentTeam: data.currentTeam, currentRound: currentRound, score: data.score})
   })
 
 });

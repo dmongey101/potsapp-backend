@@ -8,7 +8,8 @@ let RoomSchema = new Schema({
     currentPosition: {type: Number, required: true, default: 1},
     currentTeam: {type: Number, required: true, default: 1},
     currentRound: {type: String, required: true, default: 'Articulate'},
-    scores: {type: Array, required: true, default: []}, 
+    scores: {type: Array, required: true, default: []},
+    totalScore: {type: Number, required: true, default: 0},
     pot1: {type: Array, required: true},
     pot2: {type: Array, required: true, default: []},
     teams: {type: Object, required: true}
