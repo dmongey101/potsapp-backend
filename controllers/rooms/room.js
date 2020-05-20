@@ -12,7 +12,7 @@ exports.getRooms = (req, res) => {
 exports.getPlayers = (req, res) => {
     var players = [];
     rooms[req.params.room].players.forEach(player => {
-        players.push(player.name)
+        players.push(player)
     })
     res.send(players);
 }
@@ -86,7 +86,12 @@ exports.submitWords = (req, res) => {
         io.to(req.body.roomName).emit('start-game');
 
     } else {
-        io.to(req.body.roomName).emit('player-ready', req.body.player);
+        var playerIsReady = rooms[req.body.roomName].players.find(x => x.name = req.body.player);
+        
+        if (playerIsReady != null) {
+            playerIsReady.name = playerIsReady.name + ' is Ready';
+            io.to(req.body.roomName).emit('player-ready', playerIsReady);
+        }
     }
 }
 
