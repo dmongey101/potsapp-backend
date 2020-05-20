@@ -25,7 +25,7 @@ io.on("connection", socket => {
 
   socket.on("join-room", data => {
     socket.join(data.room);
-    io.to(data.room).emit("player-joined", data.player);
+    socket.to(data.room).emit("player-joined", data.player);
   });
 
   socket.on("start-timer", room => {
