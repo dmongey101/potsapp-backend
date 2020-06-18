@@ -102,6 +102,10 @@ exports.getCurrentRoom = (req, res) => {
     });
 }
 
+exports.deleteRoom = (req, res) => {
+    delete rooms[req.body.roomName];
+}
+
 function assignTeam(player) {
     const noOfPlayers = parseInt(rooms[player.room].noOfPlayers);
     const noOfTeams = parseInt(rooms[player.room].noOfTeams);

@@ -60,6 +60,10 @@ io.on("connection", socket => {
     io.in(data.room).emit('updated-score', {currentTeam: data.currentTeam, currentRound: currentRound, score: data.score, totalScore: data.totalScore})
   })
 
+  socket.on('end-game', room => {
+    RoomDB.findOneAndDelete({ name: room })
+  })
+
 });
 
 function changeGameState(room) {

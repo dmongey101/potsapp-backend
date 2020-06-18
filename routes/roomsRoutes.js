@@ -9,4 +9,5 @@ router.get('/getCurrentRoom/:room', roomsController.getCurrentRoom);
 router.post('/createRoom', roomsController.createRoom);
 router.post('/joinRoom', roomsController.joinRoom);
 router.post('/submitWords', roomsController.submitWords);
+router.post('/deleteRoom', roomsController.deleteRoom);
 module.exports = router;
