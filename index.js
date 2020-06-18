@@ -62,6 +62,7 @@ io.on("connection", socket => {
 
   socket.on('end-game', room => {
     RoomDB.findOneAndDelete({ name: room })
+    io.in(room).emit('game-ended');
   })
 
 });
